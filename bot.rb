@@ -2,6 +2,7 @@ require 'facebook/messenger'
 require 'addressable/uri'
 require 'httparty'
 require 'json'
+require 'securerandom'
 require_relative 'constants'
 require_relative 'menu'
 require_relative 'greetings'
@@ -60,7 +61,8 @@ def say(recipient_id, text, quick_replies = nil)
 end
 
 def get_hugot_line
-  HUGOT_LINES[rand(HUGOT_LINES.length)]
+  max = HUGOT_LINES.length
+  HUGOT_LINES[SecureRandom.random_number(max)]
 end
 
 wait_for_any_input
