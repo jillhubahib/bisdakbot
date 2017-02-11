@@ -1,12 +1,14 @@
 # bisdakbot
-Bisdak bot inspired by https://github.com/progapandist/coordinator-bot
+Bisdak bot is a Cebuano Messenger bot as inspired by https://github.com/progapandist/coordinator-bot
+
+<img src="/BisdakBot.png" width="100">
 
 # Menu
-- Hugot Line
-- Lokasyon (to add)
-- Kahigalaang Duol (to add)
-- Duol nga Dapit e.g. Restaurants, Clinics (to add)
-- Duol nga tourist spot (to add)
-- Forecast sa panahon (to add)
+- [x] Hugot Line
+- [ ] Asa ko
+- [ ] Asa sya
+- [ ] Duol nga Dapit e.g. Restaurants, Clinics
+- [ ] Duol nga tourist spot
+- [ ] Forecast sa panahon
 
 Find me in Messenger @bisdakbot
