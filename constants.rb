@@ -1,3 +1,8 @@
+API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='.freeze
+REVERSE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='.freeze
+
+TYPE_LOCATION = [{ content_type: 'location' }]
+
 MENU_REPLIES = [
   {
     content_type: 'text',
@@ -6,11 +11,11 @@ MENU_REPLIES = [
   }
 ].freeze
 
+HELP_TEXT = 'Palihug gamit sa menu sa mga aksyon or itype kini.'.freeze
+
 IDIOMS = {
-	unknown_command: 'Pasayloa ko bai, wa pa ko kasabot ana ron. Hugot lines lng sa ta.',
-  menu_greeting: 'Maayong adlaw, unsa ako ikaalagad?'
+	unknown_command: "Pasensya bai, wa pa ko kasabot ana ron. #{HELP_TEXT}",
+  menu_greeting: "Maayong adlaw, unsa ako ikaalagad? #{HELP_TEXT}"
 }.freeze
 
-HELP_TEXT = "Type lng ug 'hugot' or gamita ang Menu."
-
-HUGOT_LINES = YAML.load_file('hugot_lines.yml') 
+HUGOT_LINES = YAML.load_file('hugot_lines.yml')

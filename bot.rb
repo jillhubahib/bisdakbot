@@ -15,15 +15,13 @@ Greetings.enable
 Bot.on :postback do |postback|
   sender_id = postback.sender['id']
   case postback.payload
-  when 'START' then show_replies_menu(postback.sender['id'], MENU_REPLIES)
+  when 'START'
+    say(sender_id, IDIOMS[:menu_greeting])
   when 'HUGOTLINE'
-    say(sender_id, get_hugot_line)
+    say(sender_id, hugot_line)
+  when 'ASAKO'
+    lookup_location(sender_id)
   end
-end
-
-def show_replies_menu(id, quick_replies)
-  say(id, IDIOMS[:menu_greeting], quick_replies)
-  wait_for_command
 end
 
 def wait_for_command
@@ -32,12 +30,13 @@ def wait_for_command
     sender_id = message.sender['id']
     case message.text
     when /hugot/i, /pickup/i
-      say(sender_id, get_hugot_line)
+      say(sender_id, hugot_line)
+    when /asa ko/i, /asako/i
+      lookup_location(sender_id)
     when /help/i, /tabang/i
       say(sender_id, HELP_TEXT)
     else
       say(sender_id, IDIOMS[:unknown_command])
-      say(sender_id, HELP_TEXT)
     end
   end
 end
@@ -45,7 +44,7 @@ end
 def wait_for_any_input
   Bot.on :message do |message|
     puts "Received '#{message.inspect}' from #{message.sender}" # debug only
-    show_replies_menu(message.sender['id'], MENU_REPLIES)
+    wait_for_command
   end
 end
 
@@ -54,15 +53,57 @@ def say(recipient_id, text, quick_replies = nil)
     recipient: { id: recipient_id },
     message: { text: text }
   }
-  if quick_replies
-    message_options[:message][:quick_replies] = quick_replies
-  end
+  message_options[:message][:quick_replies] = quick_replies if quick_replies
+
   Bot.deliver(message_options, access_token: ENV['ACCESS_TOKEN'])
 end
 
-def get_hugot_line
+def hugot_line
   max = HUGOT_LINES.length
   HUGOT_LINES[SecureRandom.random_number(max)]
+end
+
+def lookup_location(sender_id)
+  say(sender_id, 'Okay, tabangi kog locate nimo:', TYPE_LOCATION)
+  Bot.on :message do |message|
+    if message_contains_location?(message)
+      handle_user_location(message)
+    else
+      message.reply(text: "Pasensya di ko kalocate, palihug ug usab...")
+      lookup_location(sender_id)
+    end
+    wait_for_any_input
+  end
+end
+
+def message_contains_location?(message)
+  if attachments = message.attachments
+    attachments.first['type'] == 'location'
+  else
+    false
+  end
+end
+
+def handle_user_location(message)
+  coords = message.attachments.first['payload']['coordinates']
+  lat = coords['lat']
+  long = coords['long']
+  message.type
+  # make sure there is no space between lat and lng
+  parsed = get_parsed_response(REVERSE_API_URL, "#{lat},#{long}")
+  address = extract_full_address(parsed)
+  message.reply(text: "Coordinates kung asa ka: Latitude #{lat}, Longitude #{long}. Murag naa ka sa #{address}")
+  wait_for_any_input
+end
+
+def get_parsed_response(url, query)
+  response = HTTParty.get(url + query)
+  parsed = JSON.parse(response.body)
+  parsed['status'] != 'ZERO_RESULTS' ? parsed : nil
+end
+
+def extract_full_address(parsed)
+  parsed['results'].first['formatted_address']
 end
 
 wait_for_any_input

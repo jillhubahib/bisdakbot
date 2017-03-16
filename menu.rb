@@ -8,6 +8,11 @@ class Menu
           type: 'postback',
           title: 'Hugot Line',
           payload: 'HUGOTLINE'
+        },
+        {
+          type: 'postback',
+          title: 'Asa ko',
+          payload: 'ASAKO'
         }
       ]
     }, access_token: ENV['ACCESS_TOKEN'])
