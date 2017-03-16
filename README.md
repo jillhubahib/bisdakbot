@@ -5,7 +5,7 @@ Bisdak bot is a Cebuano Messenger bot as inspired by https://github.com/progapan
 
 # Menu
 - [x] Hugot Line
-- [ ] Asa ko
+- [x] Asa ko
 - [ ] Asa sya
 - [ ] Duol nga Dapit e.g. Restaurants, Clinics
 - [ ] Duol nga tourist spot
